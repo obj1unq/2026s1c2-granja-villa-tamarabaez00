@@ -1,0 +1,36 @@
+import personaje.*
+import wollok.game.*
+import granja.*
+import cultivos.*
+import mercado.*
+
+describe "Granja Villa tests" {
+    method initialize(){
+        game.height(9)
+        game.width(9)
+        personaje.position(game.center())
+    }
+
+    test "sembrar en una celda vacía y una celda ocupada" {
+        const trigo1 = new Trigo(position = personaje.position())   //sembrar un trigo en un lugar vacio
+        personaje.sembrar(trigo1)
+        assert.equals("wheat_0.png", trigo1.image())
+        assert.that(granjaVilla.hayCultivoEn(personaje.position()))
+
+        const trigo2 = new Trigo(position = personaje.position())   //sembrar otro un trigo en el mismo lugar 
+        personaje.sembrar(trigo2)
+        assert.equals([trigo1,trigo2], granjaVilla.cultivosEn(personaje.position())) 
+    }
+    
+    test "guardar cosechas en la granja" {
+        const tomaco1 = new Tomaco(position = personaje.position())
+        personaje.sembrar(tomaco1)
+        assert.that(tomaco1.puedeSerCosechada())
+        personaje.cosecharPlanta()
+    
+        assert.notThat(granjaVilla.hayCultivoEn(personaje.position()))  // El tomaco ya no debe figurar como "sembrado" en esa posición
+        assert.that(granjaVilla.cultivosCosechados().contains(tomaco1))  // El tomaco ahora debe estar guardado en la lista de cosechados de la granja
+        assert.equals(1, granjaVilla.cantidadCultivosCosechados())  // La cultivos cosechados en la granja son exactamente 1
+    }
+
+}
