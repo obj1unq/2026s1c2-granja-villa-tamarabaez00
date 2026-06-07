@@ -13,11 +13,23 @@ object personaje {
 	method monedasDeOro() = monedasDeOro 
 
 
-	method sembrar(nuevaPlanta) {
-		nuevaPlanta.position(self.position())
-		game.addVisual(nuevaPlanta)
-		granjaVilla.registrarSiembra(nuevaPlanta)
+	method sembrarMaiz() {
+		const nuevoMaiz= new Maiz(position= self.position())
+		game.addVisual(nuevoMaiz)
+		granjaVilla.registrarSiembra(nuevoMaiz)
 	}
+
+    method sembrarTrigo() {
+        const nuevoTrigo= new Trigo(position = self.position())
+        game.addVisual(nuevoTrigo)
+        granjaVilla.registrarSiembra(nuevoTrigo)
+    }
+
+    method sembrarTomaco() {
+        const nuevoTomaco= new Tomaco(position= self.position())
+        game.addVisual(nuevoTomaco)
+        granjaVilla.registrarSiembra(nuevoTomaco)
+    }
 
 
 	method cosecharPlanta() {
@@ -43,10 +55,11 @@ object personaje {
 
         self.validarSiHayMercado(mercadoActual)
         self.validarSiHayPlantasCosechadas()
-        self.validarFondosDelMercado(mercadoActual)
+
+        const valorDeVentaDeLaCosecha = granjaVilla.valorDeCultivoEnOro()
+        mercadoActual.validarFondos(valorDeVentaDeLaCosecha)
         
-        const oroGanado = granjaVilla.valorDeCultivoEnOro()
-        monedasDeOro = monedasDeOro + oroGanado
+        monedasDeOro = monedasDeOro + valorDeVentaDeLaCosecha
         mercadoActual.registrarVenta()
         granjaVilla.venderCultivosCosechados()
     }
@@ -63,12 +76,6 @@ object personaje {
         }
     }
 
-    method validarFondosDelMercado(mercado) {
-        const oroGanado = granjaVilla.valorDeCultivoEnOro()
-        if (not mercado.puedePagar(oroGanado)) {
-            self.error("El mercado no tiene suficiente oro para pagarme")
-        }
-    }
 
 	method mercadoEnMiPosicion() {
         const objetosAca = game.getObjectsIn(self.position())
@@ -84,7 +91,9 @@ object personaje {
 
 	method colocarAspersor() {
         self.validarCeldaParaColocarAspersor()
-        aspersor.colocar(self)
+        const nuevoAspersor= new Aspersor(position = self.position(), id= granjaVilla.cantidadDeAspersores())
+        game.addVisual(nuevoAspersor)
+        nuevoAspersor.comenzarRiego()
     }
 
     method validarCeldaParaColocarAspersor() {

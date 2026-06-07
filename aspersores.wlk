@@ -37,17 +37,4 @@ class Aspersor {
     }
 }
 
-object aspersor {
-    var cantidadCreados = 0 
 
-    method colocar(personaje) {
-        cantidadCreados = cantidadCreados + 1
-        
-        const nuevoAspersor = new Aspersor(
-            position = personaje.position(), 
-            id = cantidadCreados
-        )
-        game.addVisual(nuevoAspersor)
-        nuevoAspersor.comenzarRiego()
-    }
-}

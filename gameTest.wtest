@@ -12,25 +12,49 @@ describe "Granja Villa tests" {
     }
 
     test "sembrar en una celda vacía y una celda ocupada" {
-        const trigo1 = new Trigo(position = personaje.position())   //sembrar un trigo en un lugar vacio
-        personaje.sembrar(trigo1)
-        assert.equals("wheat_0.png", trigo1.image())
+        assert.notThat(granjaVilla.hayCultivoEn(personaje.position())) //sembrar un trigo en un lugar vacio
+        personaje.sembrarTrigo()
         assert.that(granjaVilla.hayCultivoEn(personaje.position()))
-
-        const trigo2 = new Trigo(position = personaje.position())   //sembrar otro un trigo en el mismo lugar 
-        personaje.sembrar(trigo2)
+        const trigo1= granjaVilla.cultivosEn(personaje.position()).first()
+        assert.equals("wheat_0.png", trigo1.image())
+ 
+        personaje.sembrarTrigo()     //sembrar otro un trigo en el mismo lugar
+        const trigo2= granjaVilla.cultivosEn(personaje.position()).last()
         assert.equals([trigo1,trigo2], granjaVilla.cultivosEn(personaje.position())) 
     }
     
     test "guardar cosechas en la granja" {
-        const tomaco1 = new Tomaco(position = personaje.position())
-        personaje.sembrar(tomaco1)
+        personaje.sembrarTomaco()
+        const tomaco1= granjaVilla.cultivosEn(personaje.position()).first()
         assert.that(tomaco1.puedeSerCosechada())
         personaje.cosecharPlanta()
     
         assert.notThat(granjaVilla.hayCultivoEn(personaje.position()))  // El tomaco ya no debe figurar como "sembrado" en esa posición
         assert.that(granjaVilla.cultivosCosechados().contains(tomaco1))  // El tomaco ahora debe estar guardado en la lista de cosechados de la granja
         assert.equals(1, granjaVilla.cantidadCultivosCosechados())  // La cultivos cosechados en la granja son exactamente 1
+    }
+
+    test "el precio del trigo cambia a medida que se riega"{
+        personaje.sembrarTrigo()
+        const trigo1 = granjaVilla.cultivosEn(personaje.position()).first() //el precio inicial del trigo es 0
+        assert.equals("wheat_0.png", trigo1.image())    //esta en etapa 0
+        assert.notThat(trigo1.puedeSerCosechada())      //el trigo en esta etapa no puede ser cosechada
+        assert.equals(0, trigo1.precio())               //precio=0
+
+        personaje.regarPlanta()
+        assert.equals("wheat_1.png", trigo1.image())    //esta en etapa 1
+        assert.notThat(trigo1.puedeSerCosechada())      //el trigo no puede ser cosechado
+        assert.equals(0,trigo1.precio())                //precio=0
+        
+        personaje.regarPlanta()
+        assert.equals("wheat_2.png", trigo1.image())    //esta en etapa 2
+        assert.that(trigo1.puedeSerCosechada())         //el trigo en etapa 2 puede ser cosechado
+        assert.equals(100, trigo1.precio())             //precio=100
+
+        personaje.regarPlanta()
+        assert.equals("wheat_3.png", trigo1.image())    //esta en etapa 3
+        assert.that(trigo1.puedeSerCosechada())         //el trigo en etapa 3 puede ser cosechado
+        assert.equals(200, trigo1.precio())             //precio =200
     }
 
 }

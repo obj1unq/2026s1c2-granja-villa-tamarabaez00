@@ -24,9 +24,9 @@ program farmville {
  	game.addVisualCharacter(personaje)
 
 
- 	keyboard.m().onPressDo({ personaje.sembrar(new Maiz(position = personaje.position())) })
-	keyboard.t().onPressDo({ personaje.sembrar(new Trigo(position = personaje.position())) })
-	keyboard.o().onPressDo({ personaje.sembrar(new Tomaco(position = personaje.position())) })
+ 	keyboard.m().onPressDo({ personaje.sembrarMaiz() })
+	keyboard.t().onPressDo({ personaje.sembrarTrigo() })
+	keyboard.o().onPressDo({ personaje.sembrarTomaco() })
 
 	keyboard.r().onPressDo({ personaje.regarPlanta() })
 	keyboard.c().onPressDo({ personaje.cosecharPlanta()})

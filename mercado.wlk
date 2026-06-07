@@ -12,6 +12,12 @@ class Mercado {
         return monedasDeOro >= monto
     }
 
+    method validarFondos(monto) {
+		if (not self.puedePagar(monto)) {
+			self.error("El mercado no tiene suficiente oro para pagarme")
+		}
+	}
+
     method registrarVenta() {
         const totalAPagar = granjaVilla.valorDeCultivoEnOro()
         

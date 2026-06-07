@@ -7,6 +7,7 @@ object granjaVilla {
     const property cultivosCosechados= []
     const cultivosSembrados= []
     var valorEnOro= 0
+    var property cantidadDeAspersores = 0
 
     method guardarCosecha(cultivo){
         cultivosSembrados.remove(cultivo)
@@ -36,4 +37,8 @@ object granjaVilla {
     method esUnCultivoDeLaGranja(cosa) {
         return cultivosSembrados.contains(cosa)
     }
+
+	method sumarAspersor() {
+		cantidadDeAspersores = cantidadDeAspersores + 1
+	}
 }
